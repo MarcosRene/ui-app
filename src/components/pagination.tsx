@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom'
 import {
   ChevronLeft,
   ChevronRight,
@@ -5,7 +6,7 @@ import {
   ChevronsRight,
 } from 'lucide-react'
 
-import { useSearchParams } from 'react-router-dom'
+
 import { Button } from './ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select'
 
