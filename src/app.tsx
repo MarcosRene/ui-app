@@ -1,14 +1,16 @@
+import { useState } from 'react'
 import { Plus, Search, FileDown, MoreHorizontal, Filter }  from 'lucide-react'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { useSearchParams } from 'react-router-dom'
+import * as Dialog from '@radix-ui/react-dialog'
 
 import { Button } from './components/ui/button'
+import { CreateTagForm } from './components/create-tag-form'
 import { Header } from './components/header'
 import { Tabs } from './components/tabs'
 import { Control, Input } from './components/ui/input'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './components/ui/table'
 import { Pagination } from './components/pagination'
-import { useState } from 'react'
 
 export interface TagResponse {
   first: number
@@ -22,6 +24,7 @@ export interface TagResponse {
 
 export interface Tag {
   title: string
+  slug: string
   amountOfVideos: number
   id: string
 }
@@ -68,10 +71,31 @@ export function App() {
       <main className="max-w-6xl mx-auto space-y-5">
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold">Tags</h1>
-          <Button variant="primary">
-            <Plus size={12} />
-            Create new
-          </Button>
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <Button variant="primary">
+                <Plus size={12} />
+                Create new
+              </Button>
+            </Dialog.Trigger>
+
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed inset-0 bg-black/70"/>
+              <Dialog.Content className="p-10 fixed top-0 right-0 bottom-0 h-screen min-w-[320px] z-10 bg-zinc-950 border-l border-zinc-900">
+                <div className="space-y-3">
+                  <Dialog.Title className="text-xl font-bold">
+                    Create tag
+                  </Dialog.Title>
+
+                  <Dialog.Description className="text-sm text-zinc-500">
+                    Tags can be used to group videos about similar concepts.
+                  </Dialog.Description>
+                </div>
+
+                <CreateTagForm />
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
         </div>
 
         <div className="flex items-center justify-between">
@@ -114,7 +138,7 @@ export function App() {
                 <TableCell>
                   <div className="flex flex-col gap-0.5">
                     <span className="font-medium">{tag.title}</span>
-                    <span className="text-xs text-zinc-500">{tag.id}</span>
+                    <span className="text-xs text-zinc-500">{tag.slug}</span>
                   </div>
                 </TableCell>
                 <TableCell className="text-zinc-300">{tag.amountOfVideos} video(s)</TableCell>
